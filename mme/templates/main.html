@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Morrowind Map Explorer (MME)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="static/custom.css" rel="stylesheet" media="screen">
+    <link href="static/jquery-ui.min.css" rel="stylesheet" media="screen">
+    <!-- <link href="static/jquery-ui.theme.min.css" rel="stylesheet" media="screen"> -->
+  </head>
+  <body class="body">
+    <div class="container-fluid">
+      <form action="" method="post">
+        <!-- <div class="row no-gutters">
+          <b>Morrowind Map Explorer (MME)</b>
+        </div> -->
+        <div class="container map">
+          <div class="pointer" id="pointer">[00.00:00.00]</div>
+          <div class="container img" id="img_container">
+            <img class="img" id="img" src="{{img}}" alt="img" style="width: {{settings.view_point.z}}%;"/>
+          </div>
+          <div class="scaler" id="scaler">
+            <div class="scale ui-slider-handle" id="scale">{{settings.view_point.z}}%</div>
+          </div>
+        </div>
+
+        <div class="container controls">
+          <input class="name" list="datalistOptions" id="name" name="name" placeholder="Type to search..." value={{settings.search.text}}>
+          <datalist id="datalistOptions">
+            {% for name in names %}
+              <option value="{{name}}">
+            {% endfor %}
+          </datalist>
+          <input type="submit" class="submit_button" name="action" value="Find" />
+          <textarea class="comment" id="comment" name="comment" placeholder="Your comment for location"></textarea>
+          <div class="btn-group status_container" role="group" aria-label="Status">
+            <input type="radio" class="btn-check" name="status" id="status_0" value="0" autocomplete="off" checked>
+            <label class="btn btn-secondary" for="status_0">UNKNOWN</label>
+            <input type="radio" class="btn-check" name="status" id="status_1" value="1" autocomplete="off">
+            <label class="btn btn-secondary" for="status_1">VISITED</label>
+            <input type="radio" class="btn-check" name="status" id="status_2" value="2" autocomplete="off">
+            <label class="btn btn-secondary" for="status_2">PLANNED</label>
+            <input type="radio" class="btn-check" name="status" id="status_3" value="3" autocomplete="off">
+            <label class="btn btn-secondary" for="status_3">SPECIAL</label>
+          </div>
+        </div>
+
+        <div class="container description">
+          <div class="description" id="description">{{report}}</div>
+        </div>
+
+      </form>
+    </div>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/jquery-ui.min.js"></script>
+    <script>
+
+      $(function() {
+        $("#img").ready(function() {
+          $.getJSON('/map_init', {
+              }, function(data) {
+                $("#img").css("width", data.view_point.w + "%");
+                $("#img_container").scrollLeft(parseInt(data.view_point.x * $('#img_container').innerWidth() / 100));
+                $("#img_container").scrollTop(parseInt(data.view_point.y * $('#img_container').innerHeight() / 100));
+          });
+          return false;
+        });
+      });
+
+
+      $(function() {
+        $("#img_container").on('scroll', function(e) {
+          e.preventDefault();
+          var z = parseInt($("#scaler").slider("value"));
+          var x = parseInt(100 * $("#img_container").scrollLeft() / $('#img_container').innerWidth());
+          var y = parseInt(100 * $("#img_container").scrollTop() / $('#img_container').innerHeight());
+          $.getJSON('/map_moved', {
+                x: x,
+                y: y,
+                z: z,
+              }, function(data) {
+                // ...
+          });
+          return false;
+        });
+      });
+
+
+      $( function() {
+        var handle = $("#scale");
+        $("#scaler").slider({
+          range: "min",
+          min: 1,
+          max: 300,
+          value: parseInt($("#scale").text()),
+          create: function() {
+            // handle.text('scale');
+          },
+          slide: function(event, ui) {
+            var z = parseInt(ui.value);
+            handle.text(z);
+            $("#img").css("width", z + "%");
+            var x = 100;
+            var y = 100;
+            $.getJSON('/map_moved', {
+                  x: x,
+                  y: y,
+                  z: z,
+                }, function(data) {
+                  // ...
+            });
+          }
+        });
+        $("#scale").val($("#scaler").slider("value"));
+      } );
+
+
+      $(function() {
+        $("#img").on('mousemove', function(e) {
+          var parentOffset = $(this).offset();
+          var x = e.pageX - parentOffset.left;
+          var y = e.pageY - parentOffset.top;
+          var x_max = $(this).width();
+          var y_max = $(this).height();
+          var x_rel = (100*x/x_max).toFixed(2)
+          var y_rel = (100*(1-y/y_max)).toFixed(2)
+          $("#pointer").html(" [" + x_rel + " : " + y_rel + "]");
+          return false;
+        });
+      });
+
+
+      $(function() {
+        $("#img").on('click', function(e) {
+          var parentOffset = $(this).offset();
+          var x = e.pageX - parentOffset.left;
+          var y = e.pageY - parentOffset.top;
+          var x_max = $(this).width();
+          var y_max = $(this).height();
+          var x_rel = (100*x/x_max).toFixed(2);
+          var y_rel = (100*(1-y/y_max)).toFixed(2);
+          $.getJSON('/map_clicked', {
+                x_rel: x_rel,
+                y_rel: y_rel,
+              }, function(data) {
+                $("#name").val(data.name);
+                $("#status_" + data.status).trigger('click');
+                $("#description").html(data.description);
+                $("#comment").val(data.comment);
+          });
+          return false;
+        });
+      });
+
+
+      function update_custom_data() {
+        var name =   $.trim($("#name").val());
+        var status = parseInt($("input[name='status']:checked").val());
+        var comment = $.trim($("#comment").val());
+        $.getJSON('/update_custom_data', {
+              name: name,
+              status: status,
+              comment: comment,
+            }, function(data) {
+              // $("#img").attr("src", $("#img").attr("src") + '?' + Math.random());
+              $("#img").attr("src", data.img);
+        });
+        return false;
+      }
+
+
+      $(function() {
+        $("#comment").on('change', function(e) {
+          e.preventDefault();
+          update_custom_data();
+        });
+      });
+
+
+      $(function() {
+        $("input[name='status']").on('change', function(e) {
+          e.preventDefault();
+          update_custom_data();
+        });
+      });
+
+
+    </script>
+  </body>
+</html>
