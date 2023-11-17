@@ -1,0 +1,42 @@
+SAMPLE RECORD of mwmain.gdb
+
+loc
+	nm = Abernanit
+	pc = 18
+	lt = point
+	dl = 3
+	np = 1
+	ps = 4
+	pd = -52455,22839
+	pt = square
+end
+
+ANALIZE:
+
+pattern = r'(.^loc)(.*?)(nm = )(.*?)(pc = )(.*?)(lt = )(.*?)(dl = )(.*?)(np = )(.*?)(ps = )(.*?)(pd = )(.*?)(,)(.*?)(pt = )(.*?)(.^end)'
+result = re.findall(pattern, source, flags=re.MULTILINE|re.DOTALL)
+
+nm = Abernanit
+  pattern 3 {'*': 863}
+pc = 18
+  pattern 5 {'10': 9, '11': 11, '18': 219, '19': 49, '20': 281, '21': 42, '22': 22, '23': 28, '24': 86, '25': 9, '26': 67, '27': 6, '28': 9, '29': 25}
+lt = point
+  pattern 7 {'point': 863}
+dl = 3
+  pattern 9 {'0': 23, '1': 8, '2': 24, '3': 280, '4': 77, '5': 451}
+np = 1
+  pattern 11 {'1': 863}
+ps = 4
+  pattern 13 {'4': 863}
+pd = -52455,22839
+  pattern 15|17 {'*': 863}
+pt = square
+  pattern 19 {'square': 863}
+
+  dl - zoom level
+  0 - main cities
+  1 - magical places
+  2 - mystical places
+  3 - caves, mines, tombs, grottoes
+  4 - farms, camps, fortresses, wrecks
+  5 - houses, individual rooms, guilds

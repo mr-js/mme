@@ -9,12 +9,13 @@ import json
 import codecs
 import os
 from calculation import MME
+from itertools import cycle
 
 
 app = Flask(__name__)
 app.secret_key = token_hex(16)
 filter_level = 4
-mme = MME(filter_level)
+mme = MME()
 settings = dict()
 
 
@@ -23,10 +24,12 @@ def load_global_settings():
     if os.path.isfile('settings.json'):
         with codecs.open('settings.json', 'r', 'utf-8') as f:
             settings = json.load(f)
+    if 'ui' not in settings:
+        settings['ui'] = {'languages' : {'ru', 'eng'}}
+        settings['ui'] = {'language' : 'ru'}
+    mme.profile = settings['ui']['language']
     if 'view_point' not in settings:
         settings['view_point'] = {'x' : 0, 'y' : 0, 'z' : 100}
-    if 'search' not in settings:
-        settings['search'] = {'text' : '', 'results' : {}}
 
 
 def save_global_settings():
@@ -35,34 +38,34 @@ def save_global_settings():
         json.dump(settings, f, ensure_ascii=False, indent=4)
 
 
-def find(text=''):
-    report = 'Search results:\n'
-    if text != '':
-        settings['search'] = dict()
-        settings['search']['text'] = text
-        settings['search']['results'] = mme.find_points_by_text(text)
-    else:
-        settings['search'] = dict()
-        settings['search']['text'] = ''
-        settings['search']['results'] = dict()
-    report += '\n'.join(f'{k}\t[{v.get("x")}:{v.get("y")}]' for k, v in settings['search']['results'].items())
-
-    return report
+def __next_language():
+    languages_cycle = cycle(settings['ui']['languages'])
+    while (limit := 0 < 10):
+        limit += 1
+        item = next(languages_cycle)
+        if item == settings['ui']['language']:
+            settings['ui']['language'] = next(languages_cycle)
+            return settings['ui']['language']
 
 
 @app.route('/', methods=['POST', 'GET'])
 def page_main():
     global mme
     load_global_settings()
-    mme.build_map(filter_level, settings['search']['results'])
+    mme.build_map(filter_level)
     report = ''
     if request.method == 'GET':
-        report = find()
+        pass
     elif request.method == 'POST':
-        if request.form['action'] == 'Find':
-            report = find(request.form['name'])
+        save_global_settings()
+        if request.form['action'] == 'Language':
+            __next_language()
             save_global_settings()
-            mme.build_map(filter_level, settings['search']['results'])
+            load_global_settings()
+            mme.build_map(filter_level)
+        elif request.form['action'] == 'Patch':
+            report = mme.patch_data()
+            mme.build_map(filter_level)
     names = mme.find_points_by_text('')
 
     return render_template('main.html', img=mme.img, names=names, settings=settings, report=report)
@@ -107,9 +110,19 @@ def update_custom_data():
         mme.points[name].update({'comment' : comment})
         mme.save_custom_data()
     # load_global_settings()
-    img=mme.build_map(filter_level, settings['search']['results'])
+    img = mme.build_map(filter_level)
     return jsonify(img=img)
 
+
+@app.get('/search_clicked')
+def search_clicked():
+    global mme
+    report = 'Search results:\n'
+    text = request.args.get('text')
+    results = mme.find_points_by_text(text)
+    img = mme.build_map(filter_level, results)
+    report += '\n'.join(f'{k}\t[{v.get("x")}:{v.get("y")}]' for k, v in results.items())
+    return jsonify(img=img, text=text, report=report)
 
 if __name__ == '__main__':
     # app.run(host='0.0.0.0', debug=True, port='5000')

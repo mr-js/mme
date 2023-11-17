@@ -25,13 +25,13 @@
         </div>
 
         <div class="container controls">
-          <input class="name" list="datalistOptions" id="name" name="name" placeholder="Type to search..." value={{settings.search.text}}>
+          <input class="name" list="datalistOptions" id="name" name="name" placeholder="Type to search...">
           <datalist id="datalistOptions">
             {% for name in names %}
               <option value="{{name}}">
             {% endfor %}
           </datalist>
-          <input type="submit" class="submit_button" name="action" value="Find" />
+          <input type="button" class="submit_button" name="search" id="search" value="Search" />
           <textarea class="comment" id="comment" name="comment" placeholder="Your comment for location"></textarea>
           <div class="btn-group status_container" role="group" aria-label="Status">
             <input type="radio" class="btn-check" name="status" id="status_0" value="0" autocomplete="off" checked>
@@ -44,11 +44,13 @@
             <label class="btn btn-secondary" for="status_3">SPECIAL</label>
           </div>
         </div>
-
         <div class="container description">
           <div class="description" id="description">{{report}}</div>
         </div>
-
+        <div class="row">
+          <input type="submit" placeholder="action" name="action" value="Language" class="submit_button"/>
+          <input type="submit" placeholder="action" name="action" value="Patch" class="submit_button"/>
+        </div>
       </form>
     </div>
     <script src="/static/js/jquery.min.js"></script>
@@ -181,6 +183,21 @@
         $("input[name='status']").on('change', function(e) {
           e.preventDefault();
           update_custom_data();
+        });
+      });
+
+
+      $(function() {
+        $("#search").on('click', function(e) {
+          var text = $.trim($("#name").val());
+          $.getJSON('/search_clicked', {
+                text: text,
+              }, function(data) {
+                $("#img").attr("src", data.img);
+                $("#name").val(data.text);
+                $("#description").html(data.report);
+          });
+          return false;
         });
       });
 

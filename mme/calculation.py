@@ -6,19 +6,20 @@ import json
 from base64 import  b64encode
 import os
 from enum import Enum
+from tqdm import tqdm
 
 
 class MME():
 
 
-    def __init__(self, filter_level=5):
+    def __init__(self, profile='eng'):
+        self.profile = profile
         self.points = dict()
-        self.build_map(filter_level=filter_level)
 
 
     def load_data(self):
         points = dict()
-        file = 'map.json'
+        file = os.path.join('profiles', self.profile, 'map.json')
         if os.path.isfile(file):
             with codecs.open(file, 'r', 'utf-8') as f:
                 points = json.load(f)
@@ -27,7 +28,7 @@ class MME():
 
     def load_custom_data(self):
         points = dict()
-        file = 'custom.json'
+        file = os.path.join('profiles', self.profile, 'custom.json')
         if os.path.isfile(file):
             with codecs.open(file, 'r', 'utf-8') as f:
                 points = json.load(f)
@@ -46,7 +47,7 @@ class MME():
                     'status': self.points[key].get('status', 0),
                     'comment' : self.points[key].get('comment', '')
                 }
-        file = 'custom.json'
+        file = os.path.join('profiles', self.profile, 'custom.json')
         with codecs.open(file, 'w', 'utf-8') as f:
             json.dump(points, f, ensure_ascii=False, indent=4)
 
@@ -57,13 +58,17 @@ class MME():
             x = self.points[key].get('x', 0)
             x = self.points[key].get('y', 0)
             z = self.points[key].get('z', 0)
+            img = self.points[key].get('img', '')
+            description = self.points[key].get('description', '')
             if True:
                 points[key] = {
                     'x': self.points[key].get('x', 0),
                     'y': self.points[key].get('y', 0),
-                    'z': self.points[key].get('z', 0)
+                    'z': self.points[key].get('z', 0),
+                    'img': self.points[key].get('img', ''),
+                    'description': self.points[key].get('description', '')
                 }
-        file = 'map.json'
+        file = os.path.join('profiles', self.profile, 'map.json')
         with codecs.open(file, 'w', 'utf-8') as f:
             json.dump(points, f, ensure_ascii=False, indent=4)
 
@@ -145,10 +150,11 @@ class MME():
 
 
     def __find_description(self, name: str):
-        path = os.path.join(os.path.abspath(os.path.join(os.getcwd(), os.pardir)), 'Morrowind Reference', 'html')
+        path = os.path.join('profiles', self.profile, f'Morrowind Reference ({self.profile})')
         if not os.path.isdir(path):
-            return 'NO REFERENCE INSTALLED'
-        files = os.listdir(path)
+            print('NO REFERENCE INSTALLED')
+            return ''
+        files = os.listdir(os.path.join(path, 'html'))
         _name = re.sub('(.*)(\,)(.*)', r'\1', name).replace(':', '').strip().lower()
         result = sorted(list(filter(lambda x: re.sub('(.*)(\,)|(\(локация\))|(\(Morrowind\))|(\.html)(.*)', r'\1', x).replace('_', ' ').strip().lower() == _name, files)))
         # result = sorted(list(filter(lambda x: x.startswith(name.replace(' ', '_')), files)))
@@ -156,12 +162,13 @@ class MME():
             return ''
         else:
             file = result[0]
-        filename = os.path.join(path, file)
+        filename = os.path.join(path, 'html', file)
         if filename:
             with codecs.open(filename, 'r', 'utf-8') as f:
                 description = f.read()
             description = re.sub(r'(<a.*\">)(.*)(<\/a>)', r'\2', description, flags=re.MULTILINE)
         else:
+            print('NO LOCATION DESCRIPTION')
             description = 'NO LOCATION DESCRIPTION'
 
         return description
@@ -173,7 +180,7 @@ class MME():
         z = self.points[name].get('z', 0)
         status = self.points[name].get('status', 0)
         comment = self.points[name].get('comment', '')
-        description = self.__find_description(name)
+        description = self.points[name].get('description', '')
 
         return name, x, y, z, status, comment, description
 
@@ -187,8 +194,8 @@ class MME():
         return result
 
 
-    def convert_data(self, filter_level: int=5):
-        db_filename = os.path.join(os.path.abspath(os.path.join(os.getcwd(), os.pardir)), 'mim_hi', 'mwmain.gdb')
+    def convert_data(self, no_images=True):
+        db_filename = os.path.join('..', 'third_party', f'mwmain_{self.profile}.gdb')
         if not os.path.isfile(db_filename):
             print(f'!Source gdb not found at: {db_filename}')
         with codecs.open(db_filename, 'r', 'utf-8') as f:
@@ -202,60 +209,54 @@ class MME():
             z = int(item[9].strip())
             self.points[name] = {'x': x, 'y': y, 'z': z}
         self.points = dict(sorted(self.points.items()))
-        for key in list(self.points.keys()):
-            if int(self.points[key].get('z')) > filter_level:
-                del self.points[key]
+        for key in tqdm(self.points.keys()):
+            description = self.__find_description(key)
+            if description == 'NO LOCATION DESCRIPTION':
+                print(f'!NO DESCRIPTION for {key}')
+            pattern = r'(<img)(.*?)(src=")(.*?)(")(.*?)(>)'
+            result = re.findall(pattern, description, flags=re.MULTILINE|re.DOTALL)
+            img = ''
+            if len(result) > 0 and not no_images:
+                img = result[0][3]
+            description = re.sub(pattern, '', description)
+            self.points[key]['img'] = img
+            self.points[key]['description'] = description
         self.save_data()
 
 
     def patch_data(self):
         patch = dict()
-        if os.path.isfile('patch.json'):
-            with codecs.open('patch.json', 'r', 'utf-8') as f:
+        report = ''
+        file = os.path.join('profiles', self.profile, 'patch.json')
+        if os.path.isfile(file):
+            with codecs.open(file, 'r', 'utf-8') as f:
                 patch = json.load(f)
         self.load_data()
         for orig_name, value in patch.items():
             patch_data = patch[orig_name]
             if orig_name in self.points:
-                print(f'!MODIFIED: {orig_name} =>', end= ' ')
                 n = patch_data.get('n', None) if patch_data.get('n', None) else self.points[orig_name].get('n')
                 x = patch_data.get('x', None) if patch_data.get('x', None) else self.points[orig_name].get('x')
                 y = patch_data.get('y', None) if patch_data.get('y', None) else self.points[orig_name].get('y')
                 z = patch_data.get('z', None) if patch_data.get('z', None) else self.points[orig_name].get('z')
                 del self.points[orig_name]
                 self.points[n] = {'x': x, 'y': y, 'z': z}
-                print(f'{n} {self.points[n]}')
+                report += f'!MODIFIED: {orig_name} => {n} {self.points[n]}\n'
             else:
-                print(f'!NEW ADDED:', end= ' ')
                 n = patch_data.get('n', None) if patch_data.get('n', None) else 'NEW LOCATION NAME'
                 x = patch_data.get('x', None) if patch_data.get('x', None) else 1
                 y = patch_data.get('y', None) if patch_data.get('y', None) else 1
                 z = patch_data.get('z', None) if patch_data.get('z', None) else 1
                 self.points[n] = {'x': x, 'y': y, 'z': z}
-                print(f'{n} {self.points[n]}')
+                report += f'!NEW ADDED: {n} {self.points[n]}\n'
         self.points = dict(sorted(self.points.items()))
         self.save_data()
-
-
-    def __uncorrect_description_file_links(self):
-        total = 0
-        errors = 0
-        for key, values in self.points.items():
-            name, x, y, z, status, comment, description = self.get_point_info(key)
-            if len(description) == 0:
-                print(key + ' => ' + '!DESCRIPTION NOT FOUND')
-                errors += 1
-            total += 1
-        return errors, total
+        print(report)
+        return report
 
 
 if __name__ == '__main__':
-    filter_level = 5
-
-    mme = MME(filter_level)
-    mme.convert_data(filter_level)
-    mme.patch_data()
-
-    # mme = MME(filter_level)
-    # errors, total = mme._MME__uncorrect_description_file_links()
-    # print(f'{total=} ({errors=})')
+    ...
+    # mme = MME('ru')
+    # mme.convert_data()
+    # mme.patch_data()
