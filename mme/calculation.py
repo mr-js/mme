@@ -150,7 +150,7 @@ class MME():
 
 
     def __find_description(self, name: str):
-        path = os.path.join('profiles', self.profile, f'Morrowind Reference ({self.profile})')
+        path = os.path.join('..', 'third_party', f'Morrowind Reference ({self.profile})')
         if not os.path.isdir(path):
             print('NO REFERENCE INSTALLED')
             return ''
@@ -215,11 +215,9 @@ class MME():
                 print(f'!NO DESCRIPTION for {key}')
             pattern = r'(<img)(.*?)(src=")(.*?)(")(.*?)(>)'
             result = re.findall(pattern, description, flags=re.MULTILINE|re.DOTALL)
-            img = ''
-            if len(result) > 0 and not no_images:
-                img = result[0][3]
-            description = re.sub(pattern, '', description)
-            self.points[key]['img'] = img
+            if no_images:
+                description = re.sub(pattern, '', description)
+            self.points[key]['img'] = ''
             self.points[key]['description'] = description
         self.save_data()
 

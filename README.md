@@ -2,7 +2,7 @@
  Morrowind Map Explorer (interactive web service)
 
  ## What's new
- 1. Native multi language support (now fully Russian language is ready, English will be ready a little later)
+ 1. Native multi language support (now fully English language and Russian language)
  2. Hot cycle switching of localizations in the application just by pressing key "Select next language": simultaneous work with several localizations.
  2. One single map data file for each localization (locations, descriptions, images), but different custom data for each.
  > [!WARNING]
@@ -15,9 +15,11 @@
  > To switch localization press "Language" (scroll to bottom of page). Editing "settings.json" is no longer required.
 
  ## Examples
- ![mme](/images/mme.png)
+ ![mme](/images/mme_eng_1.png)
 
- Full game map with main locations, scrollable and zoomable. You can click on locations, mark them as unopened (default), explored, planned or special - automatically remembered and marked on the map with different colors, as well as leave arbitrary comments for each individual location. When you click on a location point, a detailed description from the Fandom Encyclopedia is downloaded and displayed under the location, including diagrams and pictures (works offline from the offline guide).
+ Full game map with main locations, scrollable and zoomable. You can click on locations, mark them as unopened (default), explored, planned or special - automatically remembered and marked on the map with different colors, as well as leave arbitrary comments for each individual location. When you click on a location point, a detailed description from the Fandom Encyclopedia is displayed under the location, including diagrams and pictures (works offline from local database).
+
+ ![mme](/images/mme_eng_2.png)
 
  ## Remarks
  All location data is stored separately in an open format (base map data, custom map data and user map settings), so everything can be easily transferred. There is also a built-in mechanism for patching existing map data, including adding new locations. Database support for different localizations of the game.
