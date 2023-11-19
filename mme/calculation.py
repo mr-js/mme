@@ -1,19 +1,20 @@
 from PIL import Image, ImageFont, ImageDraw
 from math import radians, cos, sin, asin
+from difflib import SequenceMatcher
 import re
 import codecs
 import json
 from base64 import  b64encode
 import os
-from enum import Enum
 from tqdm import tqdm
 
 
 class MME():
 
 
-    def __init__(self, profile='eng'):
+    def __init__(self, profile='eng', filter_level=4):
         self.profile = profile
+        self.filter_level = filter_level
         self.points = dict()
 
 
@@ -58,14 +59,12 @@ class MME():
             x = self.points[key].get('x', 0)
             x = self.points[key].get('y', 0)
             z = self.points[key].get('z', 0)
-            img = self.points[key].get('img', '')
             description = self.points[key].get('description', '')
             if True:
                 points[key] = {
                     'x': self.points[key].get('x', 0),
                     'y': self.points[key].get('y', 0),
                     'z': self.points[key].get('z', 0),
-                    'img': self.points[key].get('img', ''),
                     'description': self.points[key].get('description', '')
                 }
         file = os.path.join('profiles', self.profile, 'map.json')
@@ -92,13 +91,13 @@ class MME():
         return x, y
 
 
-    def build_map(self, filter_level: int=5, marked_points: list=[]):
+    def build_map(self, marked_points: list=[]):
         img = Image.open('map.layout')
         draw = ImageDraw.Draw(img)
         font = ImageFont.truetype('font.ttf', 24, encoding='UTF-8')
         self.load_data()
         for key in list(self.points.keys()):
-            if int(self.points[key].get('z')) > filter_level:
+            if int(self.points[key].get('z')) > self.filter_level:
                 del self.points[key]
         self.load_custom_data()
         for key, values in self.points.items():
@@ -149,31 +148,6 @@ class MME():
         return name
 
 
-    def __find_description(self, name: str):
-        path = os.path.join('..', 'third_party', f'Morrowind Reference ({self.profile})')
-        if not os.path.isdir(path):
-            print('NO REFERENCE INSTALLED')
-            return ''
-        files = os.listdir(os.path.join(path, 'html'))
-        _name = re.sub('(.*)(\,)(.*)', r'\1', name).replace(':', '').strip().lower()
-        result = sorted(list(filter(lambda x: re.sub('(.*)(\,)|(\(локация\))|(\(Morrowind\))|(\.html)(.*)', r'\1', x).replace('_', ' ').strip().lower() == _name, files)))
-        # result = sorted(list(filter(lambda x: x.startswith(name.replace(' ', '_')), files)))
-        if len(result) == 0:
-            return ''
-        else:
-            file = result[0]
-        filename = os.path.join(path, 'html', file)
-        if filename:
-            with codecs.open(filename, 'r', 'utf-8') as f:
-                description = f.read()
-            description = re.sub(r'(<a.*\">)(.*)(<\/a>)', r'\2', description, flags=re.MULTILINE)
-        else:
-            print('NO LOCATION DESCRIPTION')
-            description = 'NO LOCATION DESCRIPTION'
-
-        return description
-
-
     def get_point_info(self, name: str):
         x = self.points[name].get('x', 0)
         y = self.points[name].get('y', 0)
@@ -194,10 +168,13 @@ class MME():
         return result
 
 
-    def convert_data(self, no_images=True):
+    def __build_locations_coordinates(self):
+        self.load_data()
+        report = 'BUILDING LOCATIONS COORDINATES BEGIN\n'
         db_filename = os.path.join('..', 'third_party', f'mwmain_{self.profile}.gdb')
         if not os.path.isfile(db_filename):
             print(f'!Source gdb not found at: {db_filename}')
+            return None
         with codecs.open(db_filename, 'r', 'utf-8') as f:
             source = f.read()
         pattern = r'(.^loc)(.*?)(nm = )(.*?)(pc = )(.*?)(lt = )(.*?)(dl = )(.*?)(np = )(.*?)(ps = )(.*?)(pd = )(.*?)(,)(.*?)(pt = )(.*?)(.^end)'
@@ -209,52 +186,128 @@ class MME():
             z = int(item[9].strip())
             self.points[name] = {'x': x, 'y': y, 'z': z}
         self.points = dict(sorted(self.points.items()))
-        for key in tqdm(self.points.keys()):
-            description = self.__find_description(key)
-            if description == 'NO LOCATION DESCRIPTION':
-                print(f'!NO DESCRIPTION for {key}')
-            pattern = r'(<img)(.*?)(src=")(.*?)(")(.*?)(>)'
-            result = re.findall(pattern, description, flags=re.MULTILINE|re.DOTALL)
-            if no_images:
-                description = re.sub(pattern, '', description)
-            self.points[key]['img'] = ''
-            self.points[key]['description'] = description
+        report += 'BUILDING LOCATIONS COORDINATES END\n'
+        print(report)
+        self.save_data()
+
+
+    def __load_description(self, filename, remove_images=False, remove_href=True):
+        content = ''
+        href_code_pattern=r'(<a.*\">)(.*)(<\/a>)'
+        img_code_pattern = r'(<img)(.*?)(src=")(.*?)(")(.*?)(>)'
+        if os.path.isfile(filename):
+            with codecs.open(filename, 'r', 'utf-8') as f:
+                content = f.read()
+            content = re.sub(href_code_pattern, r'\2', content, flags=re.MULTILINE)
+            if remove_images:
+                content = re.sub(img_code_pattern, '', content)
+        return content
+
+
+    def __resolve_filenames(self, name, files, threshold=0.1):
+        result = max(list(map(lambda x: {'file': x, 'ratio' : SequenceMatcher(None, name, x).ratio()}, files)), key=lambda x: float(x['ratio']))
+        if result.get('ratio') >= threshold:
+            return result.get('file')
+        else:
+            return ''
+
+
+    def __build_locations_descriptions(self, reference_path='', ai_resolving=True, remove_images=False):
+        self.load_data()
+        report = 'BUILDING LOCATIONS DESCRIPTIONS BEGIN\n'
+        if not reference_path:
+            path = os.path.join('..', 'third_party', f'Morrowind Reference ({self.profile})')
+        else:
+            path = reference_path
+        if not os.path.isdir(path):
+            print(f'!Reference not found at: {path}')
+            return None
+        files = os.listdir(os.path.join(path, 'html'))
+        match (self.profile):
+            case 'ru':
+                names_compares = lambda x, y: re.sub('(.*)(\,)|(\(локация\))|(\(Morrowind\))|(\.html)(.*)', r'\1', y).replace('_', ' ').strip().lower() == re.sub('(.*)(\,)(.*)', r'\1', x).replace(':', '').strip().lower()
+            case 'eng':
+                names_compares = lambda x, y: re.sub('(.*)(\,)|(\(location\))|(\(Morrowind\))|(\.html)(.*)', r'\1', y).replace('_', ' ').strip().lower() == re.sub('(.*)(\,)(.*)', r'\1', x).replace(':', '').strip().lower()
+            case _:
+                names_compares = lambda x, y: re.sub('(.*)(\,)|(\(location\))|(\(Morrowind\))|(\.html)(.*)', r'\1', y).replace('_', ' ').strip().lower() == re.sub('(.*)(\,)(.*)', r'\1', x).replace(':', '').strip().lower()
+        for name in tqdm(self.points.keys(), desc='Building descriptions'):
+            description = self.points[name].get('description', None)
+            if r'<html>' in description:
+                continue
+            result = sorted(list(filter(lambda file: names_compares(name, file), files)))
+            if len(result) == 0 and description.startswith('FILE:'):
+                result = sorted(list(filter(lambda file: names_compares(description.split('FILE:')[1], file), files)))
+            if len(result) == 0 and ai_resolving == True:
+                result = [self.__resolve_filenames(name, files)]
+            if len(result) == 0:
+                report += f'!NO DESCRIPTION: {name}\n'
+                continue
+            filename = os.path.join(path, 'html', result[0])
+            self.points[name]['description'] = self.__load_description(filename, remove_images)
+        report += 'BUILDING LOCATIONS DESCRIPTIONS END\n'
+        print(report)
         self.save_data()
 
 
     def patch_data(self):
         patch = dict()
-        report = ''
-        file = os.path.join('profiles', self.profile, 'patch.json')
-        if os.path.isfile(file):
-            with codecs.open(file, 'r', 'utf-8') as f:
+        report = 'PATCHING DATA BEGIN\n'
+        filename = os.path.join('profiles', self.profile, 'patch.json')
+        if os.path.isfile(filename):
+            with codecs.open(filename, 'r', 'utf-8') as f:
                 patch = json.load(f)
         self.load_data()
-        for orig_name, value in patch.items():
-            patch_data = patch[orig_name]
-            if orig_name in self.points:
-                n = patch_data.get('n', None) if patch_data.get('n', None) else self.points[orig_name].get('n')
-                x = patch_data.get('x', None) if patch_data.get('x', None) else self.points[orig_name].get('x')
-                y = patch_data.get('y', None) if patch_data.get('y', None) else self.points[orig_name].get('y')
-                z = patch_data.get('z', None) if patch_data.get('z', None) else self.points[orig_name].get('z')
-                del self.points[orig_name]
-                self.points[n] = {'x': x, 'y': y, 'z': z}
-                report += f'!MODIFIED: {orig_name} => {n} {self.points[n]}\n'
+        for item in list(patch):
+            item_value = patch[item]
+            if item.startswith('*'):
+                item_name_part = item.split('*')[1]
+                for point_name in list(self.points.keys()):
+                    if item_name_part.lower().strip() in point_name.lower().strip():
+                        if patch.get(point_name, None) is None:
+                            patch[point_name] = item_value
+                        else:
+                            report += f'!AUTO GROUP PATCH PASSED: {point_name}'
+                del patch[item]
+        for name in tqdm(list(patch.keys()), desc='Patching data'):
+            patch_data = patch[name]
+            operation_type = ''
+            if any(filter(lambda x: x == name, list(self.points.keys()))):
+                n = patch_data.get('name', None) if patch_data.get('name', None) else name
+                x = patch_data.get('x', None) if patch_data.get('x', None) else self.points[name].get('x')
+                y = patch_data.get('y', None) if patch_data.get('y', None) else self.points[name].get('y')
+                z = patch_data.get('z', None) if patch_data.get('z', None) else self.points[name].get('z')
+                d = patch_data.get('description', None) if patch_data.get('description', None) else self.points[name].get('description')
+                del self.points[name]
+                report += f'!MODIFIED: {n}\n'
             else:
-                n = patch_data.get('n', None) if patch_data.get('n', None) else 'NEW LOCATION NAME'
-                x = patch_data.get('x', None) if patch_data.get('x', None) else 1
-                y = patch_data.get('y', None) if patch_data.get('y', None) else 1
-                z = patch_data.get('z', None) if patch_data.get('z', None) else 1
-                self.points[n] = {'x': x, 'y': y, 'z': z}
-                report += f'!NEW ADDED: {n} {self.points[n]}\n'
+                n = patch_data.get('name', None) if patch_data.get('name', None) else name
+                x = patch_data.get('x', None) if patch_data.get('x', None) else 100
+                y = patch_data.get('y', None) if patch_data.get('y', None) else 100
+                z = patch_data.get('z', None) if patch_data.get('z', None) else 0
+                d = patch_data.get('description', None) if patch_data.get('description', None) else ''
+                report += f'!ADDED: {n}\n'
+            if not r'<html>' in d and d.startswith('FILE:'):
+                filename= os.path.join('profiles', self.profile, d.split('FILE:')[1])
+                content = self.__load_description(filename)
+                d = content if content else d
+            self.points[n] = {'x': x, 'y': y, 'z': z, 'description': d}
         self.points = dict(sorted(self.points.items()))
         self.save_data()
+        report += 'PATCHING DATA END\n'
         print(report)
         return report
 
 
 if __name__ == '__main__':
     ...
-    # mme = MME('ru')
-    # mme.convert_data()
+    # mme = MME('eng')
+    # mme._MME__build_locations_coordinates()
     # mme.patch_data()
+    # remove_images=False
+    # mme._MME__build_locations_descriptions(reference_path=r'C:\Games\Morrowind [MOD]\custom\Morrowind Reference (ENG)', ai_resolving=True, remove_images=remove_images)
+
+    # mme = MME('ru')
+    # mme._MME__build_locations_coordinates()
+    # mme.patch_data()
+    # remove_images=True
+    # mme._MME__build_locations_descriptions(reference_path=r'C:\Games\Morrowind [MOD]\custom\Morrowind Reference', ai_resolving=False, remove_images=remove_images)

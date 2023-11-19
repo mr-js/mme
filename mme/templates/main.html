@@ -15,12 +15,21 @@
           <b>Morrowind Map Explorer (MME)</b>
         </div> -->
         <div class="container map">
+          <select class="form-select details lod" id="lod" name="lod" >
+            <option selected>Select detalization level (0 - min, 5 - max, 4 - default)</option>
+            <option value="0">LEVEL 0</option>
+            <option value="1">LEVEL 1</option>
+            <option value="2">LEVEL 2</option>
+            <option value="3">LEVEL 3</option>
+            <option value="4">LEVEL 4</option>
+            <option value="5">LEVEL 5</option>
+          </select>
           <div class="pointer" id="pointer">[00.00:00.00]</div>
           <div class="container img" id="img_container">
-            <img class="img" id="img" src="{{img}}" alt="img" style="width: {{settings.view_point.z}}%;"/>
+            <img class="img" id="img" src="{{img}}" alt="img" style="width: {{settings.view_point.s}}%;"/>
           </div>
           <div class="scaler" id="scaler">
-            <div class="scale ui-slider-handle" id="scale">{{settings.view_point.z}}%</div>
+            <div class="scale ui-slider-handle" id="scale">{{settings.view_point.s}}%</div>
           </div>
         </div>
 
@@ -73,13 +82,13 @@
       $(function() {
         $("#img_container").on('scroll', function(e) {
           e.preventDefault();
-          var z = parseInt($("#scaler").slider("value"));
+          var s = parseInt($("#scaler").slider("value"));
           var x = parseInt(100 * $("#img_container").scrollLeft() / $('#img_container').innerWidth());
           var y = parseInt(100 * $("#img_container").scrollTop() / $('#img_container').innerHeight());
           $.getJSON('/map_moved', {
                 x: x,
                 y: y,
-                z: z,
+                s: s,
               }, function(data) {
                 // ...
           });
@@ -99,15 +108,15 @@
             // handle.text('scale');
           },
           slide: function(event, ui) {
-            var z = parseInt(ui.value);
-            handle.text(z);
-            $("#img").css("width", z + "%");
+            var s = parseInt(ui.value);
+            handle.text(s);
+            $("#img").css("width", s + "%");
             var x = 100;
             var y = 100;
             $.getJSON('/map_moved', {
                   x: x,
                   y: y,
-                  z: z,
+                  s: s,
                 }, function(data) {
                   // ...
             });
@@ -196,6 +205,24 @@
                 $("#img").attr("src", data.img);
                 $("#name").val(data.text);
                 $("#description").html(data.report);
+          });
+          return false;
+        });
+      });
+
+
+      $(function() {
+        $("#lod").on('change', function(e) {
+          e.preventDefault();
+          var lod = $("#lod").val()
+          if (lod == "Select detalization level (0 - min, 5 - max, 4 - default)") {
+            return false;
+          }
+          $.getJSON('/lod_change', {
+                lod: lod,
+              }, function(data) {
+                // $("#img").attr("src", $("#img").attr("src") + '?' + Math.random());
+                $("#img").attr("src", data.img);
           });
           return false;
         });

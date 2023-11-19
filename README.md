@@ -4,15 +4,16 @@
  ## What's new
  1. Native multi language support (now fully English language and Russian language)
  2. Hot cycle switching of localizations in the application just by pressing key "Select next language": simultaneous work with several localizations.
- 2. One single map data file for each localization (locations, descriptions, images), but different custom data for each.
- > [!WARNING]
- > "[Morrowind Reference.zip](https://www.nexusmods.com/morrowind/mods/53726/)" is no longer required for the full functioning of the program: all inclusive.
- 4. Button "Patch" in the application (you can create your own patches and make changes to current map data)
+ 3. One single map data file for each localization (locations, descriptions, images), but different custom data for each.
+ 4. Button "Patch" in the application (you can create your own patches and make changes to current map data).
+ 5. Updated the patch mechanism and resolved collisions between names in the game and encyclopedia (for RU in manual mode for ENG via AI).
+ 6. Now you can use the LOD (load objects details) to optimize the appearance of the map (5-leveled LOD).
 
  ## Usage
  Just launch the web application ("app.py")
- > [!NOTE]
- > To switch localization press "Language" (scroll to bottom of page). Editing "settings.json" is no longer required.
+
+ > [!WARNING]
+ > Your primary data (notes and markers) are stored in /profiles/{language}/custom.json. If you are actively using it, don't forget to make backups.
 
  ## Examples
  ![mme](/images/mme_eng_1.png)

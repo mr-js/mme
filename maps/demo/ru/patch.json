@@ -1,0 +1,921 @@
+{
+  "!PatchTestLocation": {
+      "name": null,
+      "x": null,
+      "y": null,
+      "z": null,
+      "description": "FILE:patch_test.html"
+  },
+    "Алмурабаларамми, Святилище": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Алмурбаларамми"
+    },
+    "Асслкушалит, Святилище": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Ассалкушалит"
+    },
+    "Башня Тель Фир, Ониксовый Зал": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Тель Фир, Ониксовый Зал"
+    },
+    "Большой Зал Тель Наги": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Тель Нага, Большой Зал"
+    },
+    "Верети и Дралор": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Плантация Дрена, Верети и Дралор"
+    },
+    "Вилла Дрена": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Плантация Дрена, Вилла Дрена"
+    },
+    "Гильдия Мораг Тонг": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Вивек, Гильдия Мораг Тонг"
+    },
+    "Забытые обломки корабля": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Забытые обломки корабля (Западное Нагорье)"
+    },
+    "Лагерь Салитов, Юрта Залита": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Салит, Юрта Залита"
+    },
+    "Лагерь Салитов, Юрта Зелая": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Салит, Юрта Зелая"
+    },
+    "Лагерь Эрабенимсунов": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Лагерь Эрабенимсун"
+    },
+    "Опустошенные обломки корабля": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Опустошённые обломки корабля"
+    },
+    "Отдаленные обломки корабля": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Отдалённые обломки корабля"
+    },
+    "Уединенные обломки корабля": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Уединённые обломки корабля"
+    },
+    "Форт Легиона Пестрой Бабочки": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Форт Легиона Пёстрой Бабочки"
+    },
+    "Холамаянский Монастырь": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Холамаян"
+    },
+    "Шахта Кальдеры": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Эбонитовая шахта Кальдеры"
+    },
+    "Яичная шахта Абаэсн-Пулу": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Яичная шахта Абаэсен-Пулу"
+    },
+    "Аванпост": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Аванпост (Маар Ган)"
+    },
+    "Аванпост Башни": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Тель Бранора (здание)"
+    },
+    "Башни Хищной Бабочки": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Гарнизон Легиона Хищной Бабочки"
+    },
+    "Башня": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Восточная сторожевая башня"
+    },
+    "Башня покоев Верховного Совета": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Покои Верховного Совета"
+    },
+    "Верхняя Башня": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Тель Мора (здание)"
+    },
+    "Волверин Холл: Гильдия Бойцов": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Волверин Холл, Гильдия Бойцов"
+    },
+    "Волверин Холл: Имперское Святилище": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Волверин Холл, Имперское Святилище"
+    },
+    "Вторая лачуга раба": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Кальдера, Вторая лачуга раба"
+    },
+    "Вход в Башню": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Тель Арун (здание)"
+    },
+    "Гостиница Горного Дела": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Эбонитовая шахта Кальдеры, Гостиница Горного Дела"
+    },
+    "Дом Погрузки": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Плантация Дрена, Дом Погрузки"
+    },
+    "Жилые Помещения Башни": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Тель Арун (здание), Жилые Помещения Башни"
+    },
+    "Зал Подземелья": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Вивек, Зал Подземелья"
+    },
+    "Казармы": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Гнисис, Казармы"
+    },
+    "Казармы и Арсенал": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Тель Вос, Казармы и арсенал"
+    },
+    "Клуб Совета": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Балмора, Клуб Совета"
+    },
+    "Лагерь Айданатов, Юрта Абассэля": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Айданат, Юрта Абассэля"
+    },
+    "Лачуга Довеса": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Плантация Дрена, Лачуга Довеса"
+    },
+    "Лачуга Ретана": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Плантация Дрена, Лачуга Ретана"
+    },
+    "Лачуга Хельви": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Плантация Дрена, Лачуга Хельви"
+    },
+    "Лачуга Хлевалы": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Плантация Дрена, Лачуга Хлевалы"
+    },
+    "Лачуга надзирателя": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Поместье Арвелов, Лачуга надзирателя"
+    },
+    "Лачуга раба": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Поместье Арвелов, Лачуга раба"
+    },
+    "Маяк": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Сейда Нин, Маяк"
+    },
+    "Неизвестные обломки корабля": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Потерянные обломки корабля"
+    },
+    "Нижняя Башня": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Тель Бранора, Нижняя Башня"
+    },
+    "Офис Горнодобывающей Компании": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Эбонитовая шахта Кальдеры, Офис Горнодобывающей Компании"
+    },
+    "Первая лачуга раба": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Эбонитовая шахта Кальдеры, Первая лачуга раба"
+    },
+    "Подземелья Арены": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Арена (Вивек)"
+    },
+    "Подземный поток": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Яичная шахта Гнисиса, Подземный поток"
+    },
+    "Покои Ариона": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Тель Вос, Покои Ариона"
+    },
+    "Пояс": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Молаг Мар"
+    },
+    "Пояс Арены": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Арена (Вивек)"
+    },
+    "Святого Олмса, Плаза": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Плаза Округа Святого Олмса"
+    },
+    "Святого Олмса, Пояс": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Округ Святого Олмса"
+    },
+    "Северная Стена": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Форт Пелагиад, Северная Стена"
+    },
+    "Северо-восточная Башня": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Тель Вос, Северо-восточная Башня"
+    },
+    "Службы Башни": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Тель Вос, Службы Башни"
+    },
+    "Сохраненные обломки корабля": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Сохранённые обломки корабля"
+    },
+    "Сторожевая Башня": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Сторожевая Башня (Суран)"
+    },
+    "Сторожевая Башня 1": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Сторожевая Башня 1 (Маар Ган)"
+    },
+    "Сторожевая Башня 2": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Сторожевая Башня 2 (Маар Ган)"
+    },
+    "Сторожевая Башня 3": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Сторожевая Башня 3 (Маар Ган)"
+    },
+    "Сторожевая Башня Горного Дела": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Эбонитовая шахта Кальдеры, Сторожевая Башня Горного Дела"
+    },
+    "Сторожка": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Плантация Дрена, Сторожка"
+    },
+    "Таверна Альд Скар": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Альд Скар"
+    },
+    "Темница Башни": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Тель Вос, Темница Башни"
+    },
+    "Тюрьма": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Тель Вос, Тюрьма"
+    },
+    "Форт Легиона Пестрой Бабочки, Башни": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Форт Легиона Пёстрой Бабочки, Башни"
+    },
+    "Форт Легиона Пестрой Бабочки, Внутреннее помещение": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Форт Легиона Пёстрой Бабочки, Внутреннее помещение"
+    },
+    "Форт Легиона Пестрой Бабочки, Тюрьма": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Форт Легиона Пёстрой Бабочки, Тюрьма"
+    },
+    "Хижина Гашны": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Валенварион, Хижина Гашны"
+    },
+    "Хижина Дурца": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Валенварион, Хижина Дурца"
+    },
+    "Хижина Ламбуг": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Валенварион, Хижина Ламбуг"
+    },
+    "Хижина Лурога": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Валенварион, Хижина Лурога"
+    },
+    "Хижина Миссуна Акина": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Валенварион, Хижина Миссуна Акина"
+    },
+    "Хижина Умуга": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Валенварион, Хижина Умуга"
+    },
+    "Храм": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Храм (Молаг Мар)"
+    },
+    "Хранилище": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Плантация Дрена, Хранилище"
+    },
+    "Центральная Башня": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Тель Вос, Центральная Башня"
+    },
+    "Южная Башня": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Тель Вос, Южная Башня"
+    },
+
+    "Юрта Абабаэля Тимсар-Дадисуна": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Зайнаб, Юрта Абабаэля Тимсар-Дадисуна"
+    },
+    "Юрта Адаммуса": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Ахеммуза, Юрта Адаммуса"
+    },
+    "Юрта Аддут-Ламану": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Эрабенимсун, Юрта Аддут-Ламану"
+    },
+    "Юрта Айнаба": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Эрабенимсун, Юрта Айнаба"
+    },
+    "Юрта Ассамма-Идана": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Ахеммуза, Юрта Ассамма-Идана"
+    },
+    "Юрта Ассеммуса": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Эрабенимсун, Юрта Ассемуса"
+    },
+    "Юрта Ахасура": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Уршилаку, Юрта Ахасура"
+    },
+    "Юрта Ашибаала": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Зайнаб, Юрта Ашибаала"
+    },
+    "Юрта Ашу-Аххе": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Эрабенимсун, Юрта Ашу-Аххе"
+    },
+    "Юрта Ашур-Дана": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Зайнаб, Юрта Ашур-Дана"
+    },
+    "Юрта Ашхана": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Зайнаб, Юрта Ашхана"
+    },
+    "Юрта Дутадалка": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Ахеммуза, Юрта Дутадалка"
+    },
+    "Юрта Забамунда": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Уршилаку, Юрта Забамунда"
+    },
+    "Юрта Занумму": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Уршилаку, Юрта Занамму"
+    },
+    "Юрта Каузи": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Ахеммуза, Юрта Каузи"
+    },
+    "Юрта Куды": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Зайнаб, Юрта Куды"
+    },
+    "Юрта Кумму": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Зайнаб, Юрта Кумму"
+    },
+    "Юрта Курапли": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Уршилаку, Юрта Курапли"
+    },
+    "Юрта Ланаби": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Ахеммуза, Юрта Ланаби"
+    },
+    "Юрта Мамеи": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Ахеммуза, Юрта Мамеи"
+    },
+    "Юрта Массарапала": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Эрабенимсун, Юрта Массарапала"
+    },
+    "Юрта Маэли": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Уршилаку, Юрта Маэли"
+    },
+    "Юрта Минассура": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Зайнаб, Юрта Минассура"
+    },
+    "Юрта Нумму": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Ахеммуза, Юрта Нумму"
+    },
+    "Юрта Патабаби": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Зайнаб, Юрта Патабаби"
+    },
+    "Юрта Ранаби": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Эрабенимсун, Юрта Ранаби"
+    },
+    "Юрта Сакиран": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Уршилаку, Юрта Сакиран"
+    },
+    "Юрта Салаттаната": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Эрабенимсун, Юрта Салаттаната"
+    },
+    "Юрта Тусси": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Зайнаб, Юрта Тусси"
+    },
+    "Юрта Хан-Амму": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Эрабенимсун, Юрта Хан-Амму"
+    },
+    "Юрта Шары": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Уршилаку, Юрта Шары"
+    },
+    "Юрта Шимсуна": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Уршилаку, Юрта Шимсуна"
+    },
+    "Юрта шаманки": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": "FILE:Лагерь Зайнаб, Юрта шаманки"
+    },
+
+    "Яичная шахта": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": null,
+        "description": "FILE:Гнисис, Яичная шахта"
+    },
+    "*Арочный Зал": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": ""
+    },
+    "Андасрет": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 4,
+        "description": null
+    },
+    "Берандас, Крепость": {
+        "name": "Берандас",
+        "x": null,
+        "y": null,
+        "z": 4,
+        "description": null
+    },
+    "Валенварион": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 4,
+        "description": null
+    },
+    "Индоранион": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 4,
+        "description": null
+    },
+    "Марандус": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 4,
+        "description": null
+    },
+    "Ротеран": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 4,
+        "description": null
+    },
+    "Теласеро": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 4,
+        "description": null
+    },
+    "Фаласмарион": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 4,
+        "description": null
+    },
+    "Хлормарен, Крепость": {
+        "name": "Хлормарен",
+        "x": null,
+        "y": null,
+        "z": 4,
+        "description": null
+    },
+    "Когорун, Храм Фей": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": ""
+    },
+    "*Дом": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": null
+    },
+    "*Вивек, ": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": ""
+    },
+    "Покои Верховного Совета": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": ""
+    },
+    "Попытка Фалвилло": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": ""
+    },
+    "Эльфийский Мореплаватель": {
+        "name": null,
+        "x": null,
+        "y": null,
+        "z": 5,
+        "description": ""
+    }
+}

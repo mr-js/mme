@@ -1,0 +1,30 @@
+{
+    "An Abandoned Shack": {
+        "status": 2,
+        "comment": ""
+    },
+    "Caldera": {
+        "status": 2,
+        "comment": ""
+    },
+    "Hla Oad": {
+        "status": 1,
+        "comment": ""
+    },
+    "Hlormaren, Keep": {
+        "status": 3,
+        "comment": ""
+    },
+    "Hlormaren, Propylon Chamber": {
+        "status": 1,
+        "comment": ""
+    },
+    "Shal": {
+        "status": 1,
+        "comment": ""
+    },
+    "Zanabi": {
+        "status": 1,
+        "comment": ""
+    }
+}
