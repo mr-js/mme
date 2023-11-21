@@ -132,6 +132,8 @@ def lod_change():
     return jsonify(img=img)
 
 if __name__ == '__main__':
-    # app.run(host='0.0.0.0', debug=True, port='5000')
-    webbrowser.open('http://127.0.0.1:8080')
-    serve(app, host="0.0.0.0", port=8080)
+    if not os.environ.get("WERKZEUG_RUN_MAIN"):
+        webbrowser.open('http://127.0.0.1:5000')
+    app.run(host='0.0.0.0', debug=True, port='5000')
+    # webbrowser.open('http://127.0.0.1:8080')
+    # serve(app, host="0.0.0.0", port=8080)
