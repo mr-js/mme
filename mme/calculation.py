@@ -294,6 +294,9 @@ class MME():
         self.points = dict(sorted(self.points.items()))
         self.save_data()
         report += 'PATCHING DATA END\n'
+        file = 'patch.log'
+        with codecs.open(file, 'w', 'utf-8') as f:
+            f.write(report)
         print(report)
         return report
 

@@ -1,11 +1,9 @@
 {
-    "ui": {
-        "language": "eng"
-    },
+    "language": "eng",
     "view_point": {
-        "x": 0,
-        "y": 0,
-        "z": 3,
-        "s": 100
+        "x": 8,
+        "y": 161,
+        "z": 4,
+        "s": 200
     }
 }
