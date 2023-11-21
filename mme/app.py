@@ -11,35 +11,29 @@ from calculation import MME
 
 
 app = Flask(__name__)
+app.config['DEBUG'] = True
 app.secret_key = token_hex(16)
 mme = MME()
-settings = dict()
 
 
 def load_global_settings():
-    global settings
+    settings = dict()
     if os.path.isfile('settings.json'):
-        with codecs.open('settings.json', 'r', 'utf-8') as f:
-            settings = json.load(f)
-    if 'ui' not in settings:
-        settings['ui'] = {'language': mme.profile}
-    else:
-        mme.profile = settings['ui'].get('language', 'eng')
-    if 'view_point' not in settings:
-        settings['view_point'] = {'x' : 0, 'y' : 0, 'z' : 4, 's': 100}
-    mme.filter_level = settings['view_point']['z']
-
+        try:
+            with codecs.open('settings.json', 'r', 'utf-8') as f:
+                settings = json.load(f)
+        except:
+            pass
+    session['language'] = settings.get('language', 'eng')
+    mme.profile = session['language']
+    session['view_point'] = settings.get('view_point', {'x' : 0, 'y' : 0, 'z' : 4, 's': 100})
+    mme.filter_level = session['view_point']['z']
 
 
 def save_global_settings():
     global settings
     with codecs.open('settings.json', 'w', 'utf-8') as f:
-        json.dump(settings, f, ensure_ascii=False, indent=4)
-
-
-def __next_language():
-    settings['ui']['language'] = 'ru' if settings['ui']['language'] == 'eng' else 'eng'
-    return settings['ui']['language']
+        json.dump(session, f, ensure_ascii=False, indent=4)
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -47,28 +41,19 @@ def page_main():
     global mme
     load_global_settings()
     mme.build_map()
-    save_global_settings()
-    report = ''
     if request.method == 'GET':
         pass
     elif request.method == 'POST':
-        save_global_settings()
-        if request.form['action'] == 'Language':
-            print(__next_language())
-            save_global_settings()
-            load_global_settings()
-            mme.build_map()
-        elif request.form['action'] == 'Patch':
-            report = mme.patch_data()
-            mme.build_map()
+        pass
+    # save_global_settings()
     names = mme.find_points_by_text('')
-
-    return render_template('main.html', img=mme.img, names=names, settings=settings, report=report)
+    report = 'Ready'
+    return render_template('main.html', img=mme.img, names=names, report=report)
 
 
 @app.get('/map_init')
 def map_init():
-    return jsonify(view_point=settings['view_point'])
+    return jsonify(view_point=session['view_point'])
 
 
 @app.get('/map_clicked')
@@ -84,15 +69,15 @@ def map_clicked():
 
 @app.get('/map_moved')
 def map_moved():
-    global settings
-    settings['view_point'] = {
+    session['view_point'] = {
         'x': int(request.args.get('x')),
         'y': int(request.args.get('y')),
-        'z': settings['view_point']['z'],
+        'z': session['view_point']['z'],
         's': int(request.args.get('s')),
     }
     save_global_settings()
-    return jsonify(comment=settings['view_point'])
+
+    return jsonify(comment=session['view_point'])
 
 
 @app.get('/update_custom_data')
@@ -113,27 +98,50 @@ def update_custom_data():
 @app.get('/search_clicked')
 def search_clicked():
     global mme
-    report = 'Search results:\n'
     text = request.args.get('text')
     results = mme.find_points_by_text(text)
+    report = f'Found: {len(results)}'
     img = mme.build_map(results)
-    report += '\n'.join(f'{k}\t[{v.get("x")}:{v.get("y")}]' for k, v in results.items())
     return jsonify(img=img, text=text, report=report)
 
 
 @app.get('/lod_change')
 def lod_change():
     global mme
-    settings['view_point']['z'] = int(request.args.get('lod'))
+    session['view_point']['z'] = int(request.args.get('lod'))
+    mme.filter_level = session['view_point']['z']
     save_global_settings()
-    # load_global_settings()
-    mme.filter_level = settings['view_point']['z']
+    load_global_settings()
     img = mme.build_map()
     return jsonify(img=img)
 
+
+@app.get('/change_language')
+def change_language():
+    session['language'] = 'ru' if session['language'] == 'eng' else 'eng'
+    mme.filter_level = session['view_point']['z']
+    save_global_settings()
+    load_global_settings()
+    mme.build_map()
+    # load_global_settings()
+    return redirect(url_for('page_main'))
+
+
+@app.get('/run_patch')
+def run_patch():
+    save_global_settings()
+    report = mme.patch_data()
+    # report += '\n'.join(f'{k}\t[{v.get("x")}:{v.get("y")}]' for k, v in results.items())
+    mme.build_map()
+    load_global_settings()
+    return jsonify(report=report)
+
+
 if __name__ == '__main__':
-    if not os.environ.get("WERKZEUG_RUN_MAIN"):
-        webbrowser.open('http://127.0.0.1:5000')
-    app.run(host='0.0.0.0', debug=True, port='5000')
-    # webbrowser.open('http://127.0.0.1:8080')
-    # serve(app, host="0.0.0.0", port=8080)
+    if app.debug:
+        if not os.environ.get("WERKZEUG_RUN_MAIN"):
+            webbrowser.open('http://127.0.0.1:5000')
+        app.run(host='0.0.0.0', debug=True, port='5000')
+    else:
+        webbrowser.open('http://127.0.0.1:8080')
+        serve(app, host="0.0.0.0", port=8080)

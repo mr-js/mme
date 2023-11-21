@@ -3,69 +3,39 @@
 }
 
 .container {
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: stretch;
-  justify-content: space-between;
-  padding: 10px 0px;
+  padding: 5px 0;
 }
 
 .container.map {
-  flex-direction: column;
-}
-
-.container.controls {
-  /* flex-direction: column; */
-}
-
-.comment {
-    flex-basis: 50%;
-    min-height: 55px;
-}
-
-.pointer {
-  position: relative;
-  top: 32px;
-  left: 16px;
-  text-align: left;
-  color: white;
-  z-index: 1;
+  padding: 0px;
+  margin: 0px;
 }
 
 .container.img {
   position: relative;
   overflow: auto;
-  /* justify-content: safe center; */
-  /* align-items: center; */
-  /* align-self: safe center; */
-  height: 500px;
+  height: calc(100vh - 100px);
   padding: 0px;
-
   box-sizing: border-box;
   border: solid 1px;
   background-color: #768296;
 }
-
 
 .img {
   position: absolute;
   margin: auto;
 }
 
-.container.description {
-  flex-direction: column;
-  height: 500px;
-  overflow: auto;
-  /* margin: 0px; */
-
-  box-sizing: border-box;
-  border: solid 1px;
-  background-color: #FFFFFF;
+.comment {
+    width: 100%;
+    min-height: 55px;
 }
 
-.scale {
-    width: fit-content !important;
-
-/* .btn-check:not(checked)+.btn {
-    font-weight: 500;
-    color: #768296; */
+.pointer {
+  position: relative;
+  top: 48px;
+  left: 16px;
+  text-align: left;
+  color: white;
+  z-index: 1;
+}

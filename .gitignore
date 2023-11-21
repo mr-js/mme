@@ -151,3 +151,8 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 mme/map.jpg
+mme/settings.json
+mme/profiles/ru/custom.json
+mme/profiles/eng/custom.json
+mme/settings.json
+mme/settings.json
